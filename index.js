@@ -33,7 +33,17 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
+    // Connect to the "insertDB" database and access its "haiku" collection
+    const PaintDrawCollection = client.db("PaintDrawDB").collection("PaintDraw");
     
+
+    //post 
+    app.post('/user', async(req,res)=>{
+
+        const data = req.body;
+        const result = await PaintDrawCollection.insertOne(data);
+        res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -53,7 +63,7 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/user', (req, res) => {
+app.get('/add', (req, res) => {
   res.send('user data here connectttt')
 })
 
