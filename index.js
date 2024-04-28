@@ -1,6 +1,6 @@
 const express = require('express')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 var cors = require('cors')
 const app = express()
 const port = process.env.PORT || 5000;
@@ -36,6 +36,21 @@ async function run() {
     // Connect to the "insertDB" database and access its "haiku" collection
     const PaintDrawCollection = client.db("PaintDrawDB").collection("PaintDraw");
     
+
+    //get 
+    app.get('/user', async(req,res)=>{
+        const cursor = PaintDrawCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    //single user get
+    app.get('/user/:id', async(req,res)=>{
+        const id= req.params.id; 
+        const query = {_id :new ObjectId(id)} ;
+        const result = await PaintDrawCollection.findOne(query);
+        res.send(result);
+    })
 
     //post 
     app.post('/user', async(req,res)=>{
