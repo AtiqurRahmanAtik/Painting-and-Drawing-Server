@@ -52,6 +52,22 @@ async function run() {
         res.send(result);
     })
 
+    // all caft get 
+    app.get('/user',async(req,res)=>{
+      const cursor = PaintDrawCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    //view single  caft get 
+
+    app.get('/user/:id', async(req,res)=>{
+      const id= req.params.id; 
+      const query = {_id :new ObjectId(id)} ;
+      const result = await PaintDrawCollection.findOne(query);
+      res.send(result);
+  })
+
     //post 
     app.post('/user', async(req,res)=>{
 
