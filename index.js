@@ -70,12 +70,70 @@ async function run() {
 
   //my art and craft get api 
 
-    app.get('/user/:email', async(req, res)=>{
+    app.get('/myProduct/:email', async(req, res)=>{
       console.log(req.params.email);
-      
-      const result =await PaintDrawCollection.find({email: req.params.email}).toArray();
+
+      const result =await PaintDrawCollection.find({email:req.params.email}).toArray();
 
       res.send(result);
+    })
+
+
+    //my art delete
+    app.delete('/myProduct/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id :new ObjectId(id)};
+      const result = await PaintDrawCollection.deleteOne(query);
+      res.send(result);
+    })
+
+    //my art update update
+    app.get('/myProduct/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id :new ObjectId(id)};
+      const result = await PaintDrawCollection.findOne(query);
+      res.send(result);
+    })
+
+    // my art update operation
+    app.put('/user/:id', async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id :new ObjectId(id)};
+      const options = { upsert: true };
+
+
+      const {
+        Name,
+        ImageURL,
+        Item_name,
+        Subcategory_Name,
+        Short_description,
+        Price,
+        Rating,
+        Customization,
+        StockStatus
+      } = req.body;
+    
+     
+      const updateItem = {
+        $set: {
+          Name,
+          ImageURL,
+          Item_name,
+          Subcategory_Name,
+          Short_description,
+          Price,
+          Rating,
+          Customization,
+          StockStatus
+        },
+      };
+
+  
+      const result = await PaintDrawCollection.updateOne(filter,updateItem,options);
+
+      res.send(result);
+
     })
 
 
